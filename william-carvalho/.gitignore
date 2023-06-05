@@ -1,0 +1,3 @@
+bin/
+obj/
+!bin/Debug/net7.0/fundo-certificado.jpg
