@@ -8,7 +8,7 @@ public class Router
         .WithName("BuscarListaAlunos")
         .WithOpenApi();
 
-        app.MapGet("buscarAluno", AlunoResource.GetAluno)
+        app.MapGet("/buscarAluno", AlunoResource.GetAluno)
         .WithName("BuscarAluno")
         .WithOpenApi();
 
