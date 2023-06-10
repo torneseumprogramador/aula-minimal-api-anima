@@ -20,7 +20,8 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-Router.Register(app);
+AlunoRouter.Register(app);
+HomeRouter.Register(app);
 
 
 // app.MapGet("/alunos", () =>
