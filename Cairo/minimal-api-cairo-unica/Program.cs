@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Minimal.Models;
+using Minimal.Config;
 
-//ROTA-COMPONENTE
+//ROTA-unica
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,10 +25,7 @@ if (app.Environment.IsDevelopment())
 
 //faz o redirect para o sistema https.
 app.UseHttpsRedirection();
-
-new WeatherForecastRoute(app).Register();
-new HomeRoute(app).Register();
-new CadastroRoute(app).Register();
+Minimal.Config.Router.Register(app);
 
 app.Run();
 
