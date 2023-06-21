@@ -169,4 +169,167 @@ public class MySqlRepositories
         }
         return false;
     }
+    public List<Disciplina> BuscarDisciplinas()
+    {
+        List<Disciplina>? disciplinas = new List<Disciplina>();
+        DbConnection dbConnection = new DbConnection();
+        MySqlConnection connection = dbConnection.GetConnection();
+
+        try
+        {
+            //Abre a conexão com o banco de dados
+            connection.Open();
+
+            //Faça operações no banco de dados
+            string query = "SELECT * FROM DISCIPLINA";
+            MySqlCommand command = new MySqlCommand(query, connection);
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Disciplina disciplina = new Disciplina
+                    {
+                        Id = reader.GetInt32("Id"),
+                        NomeDisciplina = reader.GetString("NOME_DISCIPLINA")
+                    };
+                    disciplinas.Add(disciplina);
+                }
+            }
+        }
+        catch (MySqlException ex)
+        {
+            //Lidar com exceções do MySQL
+            Console.WriteLine("Erro do MySQL: " + ex.Message);
+        }
+        catch (Exception ex)
+        {
+            //Lidar com outras exceções
+            Console.WriteLine("Erro ao executar: " + ex.Message);
+        }
+        return disciplinas;
+    }
+    public Disciplina BuscarDisciplinaPorId(int id)
+    {
+        Disciplina? disciplina = null;
+        DbConnection dbConnection = new DbConnection();
+        MySqlConnection connection = dbConnection.GetConnection();
+
+        try
+        {
+            //Abre a conexão com o banco de dados
+            connection.Open();
+
+            //Faça operações no banco de dados
+            string query = "SELECT * " +
+                            "FROM DISCIPLINA " +
+                            "WHERE ID = @id";
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@id", id);
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    disciplina = new Disciplina
+                    {
+                        Id = reader.GetInt32("Id"),
+                        NomeDisciplina = reader.GetString("NOME_DISCIPLINA")
+                    };
+                }
+            }
+        }
+        catch (MySqlException ex)
+        {
+            //Lidar com exceções do MySQL
+            Console.WriteLine("Erro do MySQL: " + ex.Message);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            //Lidar com outras exceções
+            Console.WriteLine("Erro ao executar: " + ex.Message);
+            throw;
+        }
+        finally
+        {
+            connection.Clone();
+        }
+        if (disciplina == null)
+            throw new NullReferenceException("Aluno não encontrado. ");
+        return disciplina;
+    }
+
+    public bool CadastrarDisciplina(DisciplinaDTO disciplinaRequestPost)
+    {
+        DbConnection dbConnection = new DbConnection();
+        MySqlConnection connection = dbConnection.GetConnection();
+
+        try
+        {
+            //Abre a conexão com o banco de dados
+            connection.Open();
+
+            //Faça operações no banco de dados
+            string query = "INSERT INTO DISCIPLINA (NOME_DISCIPLINA) VALUES (@nomeDisciplina)";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@nomeDisciplina", disciplinaRequestPost.NomeDisciplina);
+
+            int rowsAffected = command.ExecuteNonQuery();
+            if (rowsAffected > 0)
+            {
+                return true;
+            }
+        }
+        catch (MySqlException ex)
+        {
+            Console.WriteLine("Erro do MySql:  " + ex.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Erro ao executar: " + ex.Message);
+        }
+        finally
+        {
+            connection.Close();
+        }
+        return false;
+    }
+    public bool ExcluirDisciplinaPorId(int id)
+    {
+        DbConnection dbConnection = new DbConnection();
+        MySqlConnection connection = dbConnection.GetConnection();
+
+        try
+        {
+            //Abre a conexão com o banco de dados
+            connection.Open();
+
+            //Faça operações no banco de dados
+            string query = "DELETE FROM DISCIPLINA WHERE ID = @id";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@id", id);
+
+            int rowsAffected = command.ExecuteNonQuery();
+            if (rowsAffected > 0)
+            {
+                return true;
+            }
+        }
+        catch (MySqlException ex)
+        {
+            Console.WriteLine("Erro do MySql:  " + ex.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Erro ao executar: " + ex.Message);
+        }
+        finally
+        {
+            connection.Close();
+        }
+        return false;
+    }
+
 }

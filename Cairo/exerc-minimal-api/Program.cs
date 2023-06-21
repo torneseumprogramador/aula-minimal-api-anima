@@ -19,5 +19,6 @@ if (app.Environment.IsDevelopment())
 //faz o redirect para o sistema https.
 app.UseHttpsRedirection();
 AlunoRouter.Register(app);
+DisciplinaRouter.Register(app);
 
 app.Run();
