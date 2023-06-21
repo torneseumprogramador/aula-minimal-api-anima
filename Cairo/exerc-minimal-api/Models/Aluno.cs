@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Exercicio.Models;
 
 public class Aluno
