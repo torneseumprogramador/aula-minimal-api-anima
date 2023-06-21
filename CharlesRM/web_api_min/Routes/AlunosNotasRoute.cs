@@ -164,11 +164,42 @@ class AlunosNotasRoute:BaseRepository
         }).WithName("UpdateAluno").WithOpenApi();
 
         app.MapPost("/Aluno/GerarPDF", (int matricula) =>
+{
+    using (var command = new NpgsqlCommand($"SELECT nome, matricula, notas, media, situacao FROM Aluno WHERE matricula = @matricula", GetConnection()))
+    {
+        command.Parameters.AddWithValue("matricula", matricula);
+
+        using (var reader = command.ExecuteReader())
         {
-                GerarPdf.GerarPDFAluno(matricula);
-             
+            if (reader.Read())
+            {
+                string situacaoString = reader.GetString(4);
+                SituacaoAluno situacao;
+
+                if (!Enum.TryParse(situacaoString, out situacao))
+                {
+          
+                    situacao = SituacaoAluno.Desconhecido;
+                }
+
+                var aluno = new AlunoModel(
+                    reader.GetString(0),
+                    reader.GetInt32(1),
+                    reader.GetString(2),
+                    reader.GetInt32(3),
+                    situacao
+                );
+
+                GerarPdf.GerarPDFAluno(aluno);
                 return Results.Ok("PDF gerado com sucesso.");
-        });            
+            }
+        }
     }
+
+    return Results.NotFound();
+}).WithName("GerarPdfAluno").WithOpenApi();
+
+
     
+}
 }

@@ -3,5 +3,6 @@
     {
         Reprovado,
         Recuperacao,
-        Aprovado
+        Aprovado,
+        Desconhecido
     }
