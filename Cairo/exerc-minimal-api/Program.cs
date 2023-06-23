@@ -20,5 +20,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 AlunoRouter.Register(app);
 DisciplinaRouter.Register(app);
+MatriculaRouter.Register(app);
+CertificadoRouter.Register(app);
 
 app.Run();

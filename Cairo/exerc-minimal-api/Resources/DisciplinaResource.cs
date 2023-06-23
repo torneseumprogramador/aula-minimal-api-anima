@@ -1,4 +1,5 @@
 using Exercicio.Models;
+using Exercicio.Models.DTO;
 
 class DisciplinaResource
 {
